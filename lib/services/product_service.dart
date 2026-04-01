@@ -3,19 +3,19 @@ import 'package:http/http.dart' as http;
 import 'package:firearm_flutter/config/config.dart';
 import 'package:firearm_flutter/models/product_model.dart';
 
-class ApiService {
+class ProductService {
   static final String baseUrl = Config.baseUrl;
 
   // GET (READ)
-  static Future<List<Product>> getProducts() async {
+  static Future<List<ProductModel>> getProducts() async {
     final response = await http.get(Uri.parse("$baseUrl/products"));
     if (response.statusCode == 200) {
       final decoded = json.decode(response.body);
       if (decoded is List) {
-        return decoded.map((e) => Product.fromJson(e)).toList();
+        return decoded.map((e) => ProductModel.fromJson(e)).toList();
       } else if (decoded is Map && decoded.containsKey('data')) {
         final List data = decoded['data'];
-        return data.map((e) => Product.fromJson(e)).toList();
+        return data.map((e) => ProductModel.fromJson(e)).toList();
       } else {
         return [];
       }
@@ -25,7 +25,7 @@ class ApiService {
   }
 
   // POST (CREATE)
-  static Future<void> addProduct(Product product) async {
+  static Future<void> addProduct(ProductModel product) async {
     final response = await http.post(
       Uri.parse("$baseUrl/products"),
       headers: {"Content-Type": "application/json"},
@@ -44,7 +44,7 @@ class ApiService {
   }
 
   // PUT (UPDATE)
-  static Future<void> updateProduct(int id, Product product) async {
+  static Future<void> updateProduct(int id, ProductModel product) async {
     final response = await http.put(
       Uri.parse("$baseUrl/products/$id"),
       headers: {"Content-Type": "application/json"},

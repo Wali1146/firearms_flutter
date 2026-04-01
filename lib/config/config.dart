@@ -10,7 +10,7 @@ class Config {
     } else if (Platform.isIOS) {
       return "http://localhost:8000/api";
     } else {
-      return "http://localhost:8000/api";
+      return "http://192.168.68.131:8000/api";
     }
   }
 }

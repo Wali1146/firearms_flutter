@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firearm_flutter/models/product_model.dart';
-import 'package:firearm_flutter/services/api_service.dart';
+import 'package:firearm_flutter/services/product_service.dart';
 
 class AddProduct extends StatefulWidget {
   const AddProduct({super.key});
@@ -12,6 +12,7 @@ class AddProduct extends StatefulWidget {
 class _AddProductState extends State<AddProduct> {
   final nameController = TextEditingController();
   final priceController = TextEditingController();
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +45,7 @@ class _AddProductState extends State<AddProduct> {
             //Button Save
             ElevatedButton(
               onPressed: () async {
-                final product = Product(
+                final product = ProductModel(
                   id: 0,
                   name: nameController.text,
                   type: "firearms",
@@ -53,10 +54,11 @@ class _AddProductState extends State<AddProduct> {
                   price: double.parse(priceController.text),
                   description: "",
                 );
+                await ProductService.addProduct(product);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text("Product successfully added")),
                 );
-                await ApiService.addProduct(product);
+                await ProductService.getProducts();
                 Navigator.pop(context, true);
               },
               child: Text("Save"),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firearm_flutter/models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
-  final Product product;
+  final ProductModel product;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
   const ProductCard({super.key, required this.product, required this.onDelete, required this.onEdit});

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firearm_flutter/models/product_model.dart';
-import 'package:firearm_flutter/services/api_service.dart';
+import 'package:firearm_flutter/services/product_service.dart';
 
 class EditProduct extends StatefulWidget {
-  final Product product;
+  final ProductModel product;
   const EditProduct({super.key, required this.product});
 
   @override
@@ -17,9 +17,7 @@ class _EditProductState extends State<EditProduct> {
   void initState() {
     super.initState();
     nameController = TextEditingController(text: widget.product.name);
-    priceController = TextEditingController(
-      text: widget.product.price.toString(),
-    );
+    priceController = TextEditingController(text: widget.product.price.toString());
   }
 
   @override
@@ -30,33 +28,27 @@ class _EditProductState extends State<EditProduct> {
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
-            //Input Name
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                labelText: "Product Name",
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
+            //Product name edit
+            Text("Product Name"),
+            TextField(controller: nameController),
+            SizedBox(height: 10),
 
-            //Input Price
-            TextField(
-              controller: priceController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: "Price",
-                border: OutlineInputBorder(),
-              ),
-            ),
+            //Price product edit
+            Text("Price"),
+            TextField(controller: priceController),
+            SizedBox(height: 10),
+
+            //Description product edit
+            Text("Description"),
+            TextField(),
             SizedBox(height: 20),
 
             //Button Save
             ElevatedButton(
               onPressed: () async {
-                await ApiService.updateProduct(
+                await ProductService.updateProduct(
                   widget.product.id,
-                  Product(
+                  ProductModel(
                     id: widget.product.id,
                     name: nameController.text,
                     type: widget.product.type,
