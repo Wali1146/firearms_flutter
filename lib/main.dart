@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:firearm_flutter/pages/home/home_page.dart';
+import 'package:firearm_flutter/pages/home/login_page.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLogin;
+  const MyApp({super.key, this.isLogin = false});
 
   // This widget is the root of your application.
   @override
@@ -33,7 +35,7 @@ class MyApp extends StatelessWidget {
       ),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: isLogin ? HomePage(): LoginPage(),
     );
   }
 }

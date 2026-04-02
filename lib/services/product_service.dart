@@ -57,6 +57,7 @@ class ProductService {
         "description": product.description,
       }),
     );
+    print("Response Update: ${response.body}");
     if (response.statusCode != 200) {
       throw Exception("Failed to update product");
     }

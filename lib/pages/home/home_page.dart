@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firearm_flutter/pages/home/user_page.dart';
+import 'package:firearm_flutter/pages/home/login_page.dart';
 import 'package:firearm_flutter/pages/home/product_page.dart';
+import 'package:firearm_flutter/services/shared_preferences.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -40,6 +42,22 @@ class HomePage extends StatelessWidget {
                 );
               },
               child: Text("Users List"),
+            ),
+
+            //Button Logout
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 60),
+              ),
+              onPressed: () async {
+                await SessionManager.logout();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => LoginPage()),
+                  (route) => false,
+                );
+              },
+              child: Text("Logout"),
             ),
           ],
         ),

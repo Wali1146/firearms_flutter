@@ -5,6 +5,24 @@ import 'package:firearm_flutter/models/user_model.dart';
 
 class UserServices {
   static final String baseUrl = Config.baseUrl;
+  // LOGIN
+  static Future<Map<String, dynamic>> login(String email, String password) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/login"),
+      headers: {"Content-Type": "application/json"},
+      body: json.encode({
+        "email": email,
+        "password": password,
+      }),
+    );
+    final data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      print("Response Login: ${response.body}");
+      return data;
+    } else {
+      throw Exception("Login failed");
+    }
+  }
 
   // GET (READ)
   static Future<List<UserModel>> getUsers() async {
@@ -53,6 +71,7 @@ class UserServices {
         "role": user.role,
       }),
     );
+    print("Response Update: ${response.body}");
     if (response.statusCode != 200) {
       throw Exception("Failed to update user");
     }
