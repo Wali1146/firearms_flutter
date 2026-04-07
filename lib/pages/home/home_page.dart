@@ -1,3 +1,4 @@
+import 'package:firearm_flutter/pages/home/cart_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firearm_flutter/pages/home/user_page.dart';
 import 'package:firearm_flutter/pages/home/login_page.dart';
@@ -68,6 +69,18 @@ class HomePage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const UserPage()),
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+              _ModernCard(
+                icon: Icons.shopping_cart,
+                title: "Cart",
+                subtitle: "View and manage your cart items",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const CartPage()),
                   );
                 },
               ),

@@ -83,58 +83,55 @@ class _AddUserState extends State<AddUser> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: isLoading
-                      ? null
-                      : () async {
-                          if (usernameController.text.isEmpty || emailController.text.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Please fill all fields")),
-                            );
-                            return;
-                          }
-                          setState(() => isLoading = true);
-                          try {
-                            final user = UserModel(
-                              id: 0,
-                              username: usernameController.text,
-                              email: emailController.text,
-                              password: "password123",
-                              role: "user",
-                            );
-                            await UserServices.addUser(user);
-                            if (mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text("User successfully added")),
-                              );
-                              Navigator.pop(context, true);
-                            }
-                          } catch (e) {
-                            if (mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("Error: $e")),
-                              );
-                            }
-                          } finally {
-                            if (mounted) {
-                              setState(() => isLoading = false);
-                            }
-                          }
-                        },
+                  onPressed: isLoading ? null : () async {
+                    if (usernameController.text.isEmpty || emailController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Please fill all fields")),
+                      );
+                      return;
+                    }
+                    setState(() => isLoading = true);
+                    try {
+                      final user = UserModel(
+                        id: 0,
+                        username: usernameController.text,
+                        email: emailController.text,
+                        password: "password123",
+                        role: "user",
+                      );
+                      await UserServices.addUser(user);
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("User successfully added")),
+                        );
+                        Navigator.pop(context, true);
+                      }
+                    } catch (e) {
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Error: $e")),
+                        );
+                      }
+                    } finally {
+                      if (mounted) {
+                        setState(() => isLoading = false);
+                      }
+                    }
+                  },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                              strokeWidth: 2,
-                            ),
-                          )
-                        : const Text(
-                            "Save User",
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                          ),
+                    child: isLoading ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        strokeWidth: 2,
+                      ),
+                    ): 
+                    const Text(
+                      "Save User",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ),
               ),

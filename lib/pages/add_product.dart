@@ -83,60 +83,57 @@ class _AddProductState extends State<AddProduct> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: isLoading
-                      ? null
-                      : () async {
-                          if (nameController.text.isEmpty || priceController.text.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Please fill all fields")),
-                            );
-                            return;
-                          }
-                          setState(() => isLoading = true);
-                          try {
-                            final product = ProductModel(
-                              id: 0,
-                              name: nameController.text,
-                              type: "firearms",
-                              categoryId: 1,
-                              teamId: 1,
-                              price: double.parse(priceController.text),
-                              description: "",
-                            );
-                            await ProductService.addProduct(product);
-                            if (mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text("Product successfully added")),
-                              );
-                              Navigator.pop(context, true);
-                            }
-                          } catch (e) {
-                            if (mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("Error: $e")),
-                              );
-                            }
-                          } finally {
-                            if (mounted) {
-                              setState(() => isLoading = false);
-                            }
-                          }
-                        },
+                  onPressed: isLoading ? null: () async {
+                    if (nameController.text.isEmpty || priceController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Please fill all fields")),
+                      );
+                      return;
+                    }
+                    setState(() => isLoading = true);
+                    try {
+                      final product = ProductModel(
+                        id: 0,
+                        name: nameController.text,
+                        type: "firearms",
+                        categoryId: 1,
+                        teamId: 1,
+                        price: double.parse(priceController.text),
+                        description: "",
+                      );
+                      await ProductService.addProduct(product);
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Product successfully added")),
+                        );
+                        Navigator.pop(context, true);
+                      }
+                    } catch (e) {
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Error: $e")),
+                        );
+                      }
+                    } finally {
+                      if (mounted) {
+                        setState(() => isLoading = false);
+                      }
+                    }
+                  },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                              strokeWidth: 2,
-                            ),
-                          )
-                        : const Text(
-                            "Save Product",
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                          ),
+                    child: isLoading ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        strokeWidth: 2,
+                      ),
+                    ): 
+                    const Text(
+                      "Save Product",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ),
               ),

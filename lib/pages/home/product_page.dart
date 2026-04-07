@@ -43,108 +43,105 @@ class _ProductPageState extends State<ProductPage> {
         title: const Text("Products"),
         centerTitle: true,
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : products.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.inventory_2,
-                        size: 64,
-                        color: Colors.grey[300],
+      body: isLoading ? const Center(child: CircularProgressIndicator()): products.isEmpty ? Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.inventory_2,
+              size: 64,
+              color: Colors.grey[300],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "No Products Yet",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey[600],
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "Add your first product to get started",
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[500],
+              ),
+            ),
+          ],
+        ),
+      ): 
+      RefreshIndicator(
+        onRefresh: fetchProducts,
+        child: ListView.builder(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          itemCount: products.length,
+          itemBuilder: (context, index) {
+            return ProductCard(
+              product: products[index],
+              onEdit: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => EditProduct(product: products[index]),
+                  ),
+                );
+                if (result == true) {
+                  await fetchProducts();
+                }
+              },
+              onDelete: () async {
+                final confirm = await showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: const Text("Delete Product"),
+                    content: const Text("Are you sure you want to delete this product?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        child: const Text("Cancel"),
                       ),
-                      const SizedBox(height: 16),
-                      Text(
-                        "No Products Yet",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        "Add your first product to get started",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[500],
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        child: const Text(
+                          "Delete",
+                          style: TextStyle(color: Color(0xFFDC2626)),
                         ),
                       ),
                     ],
                   ),
-                )
-              : RefreshIndicator(
-                  onRefresh: fetchProducts,
-                  child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    itemCount: products.length,
-                    itemBuilder: (context, index) {
-                      return ProductCard(
-                        product: products[index],
-                        onEdit: () async {
-                          final result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => EditProduct(product: products[index]),
-                            ),
-                          );
-                          if (result == true) {
-                            await fetchProducts();
-                          }
-                        },
-                        onDelete: () async {
-                          final confirm = await showDialog(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                              title: const Text("Delete Product"),
-                              content: const Text("Are you sure you want to delete this product?"),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context, false),
-                                  child: const Text("Cancel"),
-                                ),
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context, true),
-                                  child: const Text(
-                                    "Delete",
-                                    style: TextStyle(color: Color(0xFFDC2626)),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                          if (confirm == true) {
-                            final deletedProduct = products[index];
-                            setState(() {
-                              products.removeAt(index);
-                            });
-                            try {
-                              await ProductService.deleteProduct(deletedProduct.id);
-                              if (mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Product successfully deleted"),
-                                  ),
-                                );
-                              }
-                            } catch (e) {
-                              setState(() {
-                                products.insert(index, deletedProduct);
-                              });
-                              if (mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text("Failed to delete product")),
-                                );
-                              }
-                            }
-                          }
-                        },
+                );
+                if (confirm == true) {
+                  final deletedProduct = products[index];
+                  setState(() {
+                    products.removeAt(index);
+                  });
+                  try {
+                    await ProductService.deleteProduct(deletedProduct.id);
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Product successfully deleted"),
+                        ),
                       );
-                    },
-                  ),
-                ),
+                    }
+                  } catch (e) {
+                    setState(() {
+                      products.insert(index, deletedProduct);
+                    });
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Failed to delete product")),
+                      );
+                    }
+                  }
+                }
+              },
+            );
+          },
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final result = await Navigator.push(
